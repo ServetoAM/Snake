@@ -6,6 +6,8 @@ window.onload = function () {
   var delay = 100;
   var snakey;
   var appley;
+  var widthInBlocks = canvasWidth/blockSize;
+  var heightInBlocks = canvasHeight/blockSize;
 
   init();
 
@@ -22,8 +24,7 @@ window.onload = function () {
       [6, 4],
       [5, 4],
       [4, 4],
-      "right"
-    ]);
+    ], "right");
     appley = new Apple([10, 10]);
     refreshCanvas();
   }
@@ -71,7 +72,7 @@ window.onload = function () {
                 nextPosition[1] -= 1;
                 break;
             default :
-                throw ("Invalid Direction");
+                throw("Invalid Direction");
         }
         this.body.unshift(nextPosition);
         this.body.pop();
@@ -88,12 +89,21 @@ window.onload = function () {
             allowedDirections = ["left", "right"];
                 break;
                 default :
-                throw ("Invalid Direction");
+                throw("Invalid Direction");
         }
         if(allowedDirections.indexOf(newDirection) > -1){
             this.direction = newDirection;
         }
-    }
+    };
+    this.checkCollision = function(){
+        var wallCollision = false;
+        var snakeCollision = false;
+        var head = this.body[0];
+        var tail = this.body.slice(1);
+        var snakeX = head[0];
+        var snakeY = head[1];
+
+    };
   }
   
   function Apple(position){
@@ -105,9 +115,9 @@ window.onload = function () {
         var radius = blockSize/2;
         var x = position[0]*blockSize + radius;
         var y = position[1]*blockSize + radius;
-        ctxt.arc(x,y, raidus, 0, Math.PI*2, true);
+        ctxt.arc(x,y, radius, 0, Math.PI*2, true);
         ctxt.fill();
-        ctxt.restaure();
+        ctxt.restore();
     };
   }
 
