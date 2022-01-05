@@ -6,37 +6,46 @@ window.onload = function () {
   var delay = 100;
   var snakey;
   var appley;
-  var widthInBlocks = canvasWidth/blockSize;
-  var heightInBlocks = canvasHeight/blockSize;
+  var widthInBlocks = canvasWidth / blockSize;
+  var heightInBlocks = canvasHeight / blockSize;
 
   init();
 
   function init() {
     // Creation of the canvas
-    var canvas = document.createElement('canvas');
+    var canvas = document.createElement("canvas");
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
     canvas.style.border = "1px solid";
     document.body.appendChild(canvas);
     //   How i want to draw on the html for the game
-    ctxt = canvas.getContext('2d');
-    snakey = new Snake([
-      [6, 4],
-      [5, 4],
-      [4, 4],
-    ], "right");
+    ctxt = canvas.getContext("2d");
+    snakey = new Snake(
+      [
+        [6, 4],
+        [5, 4],
+        [4, 4],
+      ],
+      "right"
+    );
     appley = new Apple([10, 10]);
     refreshCanvas();
   }
 
   function refreshCanvas() {
-    //Clear the canvas after set time
-    ctxt.clearRect(0, 0, canvasWidth, canvasHeight);
     snakey.advance();
-    snakey.draw();
-    appley.draw();
-    setTimeout(refreshCanvas, delay);
-  }
+    if(snakey.checkCollision()){
+      // Game Over
+    }
+    else {
+        //Clear the canvas after set time
+        ctxt.clearRect(0, 0, canvasWidth, canvasHeight);
+        
+        snakey.draw();
+        appley.draw();
+        setTimeout(refreshCanvas, delay);
+      }
+    }
 
   function drawBlock(ctxt, position) {
     var x = position[0] * blockSize;
@@ -56,90 +65,106 @@ window.onload = function () {
       }
       ctxt.restore();
     };
-    this.advance = function(){
-        var nextPosition = this.body[0].slice();
-        switch(this.direction){
-            case "left":
-                nextPosition[0] -= 1;
-                break;
-            case "right":
-                nextPosition[0] += 1;
-                break;
-            case "down":
-                nextPosition[1] += 1;
-                break;
-                case "up":
-                nextPosition[1] -= 1;
-                break;
-            default :
-                throw("Invalid Direction");
-        }
-        this.body.unshift(nextPosition);
-        this.body.pop();
-    };
-    this.setDirection = function(newDirection){
-        var allowedDirections;
-        switch(this.direction){
-            case "left":
-            case "right":
-                allowedDirections = ["up", "down"];
-                break;
-            case "down":
-            case "up":
-            allowedDirections = ["left", "right"];
-                break;
-                default :
-                throw("Invalid Direction");
-        }
-        if(allowedDirections.indexOf(newDirection) > -1){
-            this.direction = newDirection;
-        }
-    };
-    this.checkCollision = function(){
-        var wallCollision = false;
-        var snakeCollision = false;
-        var head = this.body[0];
-        var tail = this.body.slice(1);
-        var snakeX = head[0];
-        var snakeY = head[1];
-
-    };
-  }
-  
-  function Apple(position){
-    this.position = position;
-    this.draw = function(){
-        ctxt.save();
-        ctxt.fillStyle = "#33cc33";
-        ctxt.beginPath();
-        var radius = blockSize/2;
-        var x = position[0]*blockSize + radius;
-        var y = position[1]*blockSize + radius;
-        ctxt.arc(x,y, radius, 0, Math.PI*2, true);
-        ctxt.fill();
-        ctxt.restore();
-    };
-  }
-
-  document.onkeydown = function handleKeyDown(e){
-      var key = e.keyCode;
-      var newDirection;
-      switch(key){
-        case 37:
-            newDirection = "left";
-            break;
-        case 38:
-            newDirection = "up";
-            break;
-        case 39:
-            newDirection = "right";
-            break;
-        case 40:
-            newDirection = "down";
-            break;
-        default :
-            return;
+    this.advance = function () {
+      var nextPosition = this.body[0].slice();
+      switch (this.direction) {
+        case "left":
+          nextPosition[0] -= 1;
+          break;
+        case "right":
+          nextPosition[0] += 1;
+          break;
+        case "down":
+          nextPosition[1] += 1;
+          break;
+        case "up":
+          nextPosition[1] -= 1;
+          break;
+        default:
+          throw "Invalid Direction";
       }
-      snakey.setDirection(newDirection);
+      this.body.unshift(nextPosition);
+      this.body.pop();
+    };
+    this.setDirection = function (newDirection) {
+      var allowedDirections;
+      switch (this.direction) {
+        case "left":
+        case "right":
+          allowedDirections = ["up", "down"];
+          break;
+        case "down":
+        case "up":
+          allowedDirections = ["left", "right"];
+          break;
+        default:
+          throw "Invalid Direction";
+      }
+      if (allowedDirections.indexOf(newDirection) > -1) {
+        this.direction = newDirection;
+      }
+    };
+    this.checkCollision = function () {
+      var wallCollision = false;
+      var snakeCollision = false;
+      var head = this.body[0];
+      var tail = this.body.slice(1);
+      var snakeX = head[0];
+      var snakeY = head[1];
+      var minX = 0;
+      var minY = 0;
+      var maxX = widthInBlocks - 1;
+      var maxY = heightInBlocks - 1;
+      var isNotBetweenHorizontalWalls = snakeX < minX || snakeX > maxX;
+      var isNotBetweenVerticalWalls = snakeY < minY || snakeY > maxY;
+
+      if (isNotBetweenHorizontalWalls || isNotBetweenVerticalWalls) {
+        wallCollision = true;
+      }
+
+      for (var i = 0; i < tail.length; i++) {
+        if (snakeX === tail[i][0] && snakeY === tail[i][1]) {
+          snakeCollision = true;
+        }
+      }
+      return wallCollision || snakeCollision;
+    };
   }
+
+  function Apple(position) {
+    this.position = position;
+    this.draw = function () {
+      ctxt.save();
+      ctxt.fillStyle = "#33cc33";
+      ctxt.beginPath();
+      var radius = blockSize / 2;
+      var x = position[0] * blockSize + radius;
+      var y = position[1] * blockSize + radius;
+      ctxt.arc(x, y, radius, 0, Math.PI * 2, true);
+      ctxt.fill();
+      ctxt.restore();
+    };
+  }
+
+  document.onkeydown = function handleKeyDown(e) {
+    var key = e.keyCode;
+    var newDirection;
+    switch (key) {
+      case 37:
+        newDirection = "left";
+        break;
+      case 38:
+        newDirection = "up";
+        break;
+      case 39:
+        newDirection = "right";
+        break;
+      case 40:
+        newDirection = "down";
+        break;
+      default:
+        return;
+    }
+    snakey.setDirection(newDirection);
+  };
 };
