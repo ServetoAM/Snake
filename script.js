@@ -35,7 +35,7 @@ window.onload = function () {
   function refreshCanvas() {
     snakey.advance();
     if (snakey.checkCollision()) {
-      // Game Over
+      gameOver();
     } else {
       if (snakey.isEatingApple(appley)) {
         snakey.ateApple = true;
@@ -50,6 +50,26 @@ window.onload = function () {
       appley.draw();
       setTimeout(refreshCanvas, delay);
     }
+  }
+
+  function gameOver() {
+    ctxt.save();
+    ctxt.fillText("Game Over", 400, 200);
+    ctxt.fillText("Press space to play again", 400, 230);
+    ctxt.restore();
+  }
+
+  function restart() {
+    snakey = new Snake(
+      [
+        [6, 4],
+        [5, 4],
+        [4, 4],
+      ],
+      "right"
+    );
+    appley = new Apple([10, 10]);
+    refreshCanvas();
   }
 
   function drawBlock(ctxt, position) {
@@ -195,6 +215,9 @@ window.onload = function () {
       case 40:
         newDirection = "down";
         break;
+      case 32:
+        restart();
+        return;
       default:
         return;
     }
