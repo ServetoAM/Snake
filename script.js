@@ -17,7 +17,10 @@ window.onload = function () {
     var canvas = document.createElement("canvas");
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
-    canvas.style.border = "1px solid";
+    canvas.style.border = "15px solid #333333";
+    canvas.style.margin = "20px auto";
+    canvas.style.display = "block";
+    canvas.style.backgroundColor = "#e5e5e5";
     document.body.appendChild(canvas);
     //   How i want to draw on the html for the game
     ctxt = canvas.getContext("2d");
@@ -48,18 +51,28 @@ window.onload = function () {
       }
       //Clear the canvas after set time
       ctxt.clearRect(0, 0, canvasWidth, canvasHeight);
-
+      drawScore();
       snakey.draw();
       appley.draw();
-      drawScore();
       setTimeout(refreshCanvas, delay);
     }
   }
 
   function gameOver() {
     ctxt.save();
-    ctxt.fillText("Game Over", 400, 200);
-    ctxt.fillText("Press space to play again", 400, 230);
+    ctxt.font = "bold 70px sans-serif";
+    ctxt.fillStyle = "black";
+    ctxt.textAlign = "center";
+    ctxt.textBaseline = "middle";
+    ctxt.strokeStyle = "white";
+    ctxt.lineWidth = 5;
+    var centreX = canvasWidth / 2;
+    var centreY = canvasHeight / 2;
+    ctxt.strokeText("Game Over", centreX, centreY - 180);
+    ctxt.fillText("Game Over",  centreX, centreY - 180);
+    ctxt.font = "bold 40px sans-serif";
+    ctxt.strokeText("Press space to play again", centreX, centreY - 120);
+    ctxt.fillText("Press space to play again", centreX, centreY - 120);
     ctxt.restore();
   }
 
@@ -79,8 +92,14 @@ window.onload = function () {
 
   function drawScore(){
     ctxt.save();
-    ctxt.fillText("Score:", 0, 600);
-    ctxt.fillText(score.toString(), 30, 600)
+    ctxt.font = "bold 200px sans-serif";
+    ctxt.fillStyle = "gray";
+    ctxt.textAlign = "center";
+    ctxt.textBaseline = "middle";
+    var centreX = canvasWidth / 2;
+    var centreY = canvasHeight / 2;
+    // ctxt.fillText("Score:", 0, 600);
+    ctxt.fillText(score.toString(), centreX, centreY)
     ctxt.restore();
   }
 
@@ -97,7 +116,7 @@ window.onload = function () {
     this.draw = function () {
       ctxt.save();
       // color of the snake
-      ctxt.fillStyle = "#ff0000";
+      ctxt.fillStyle = "#007f3f";
       for (var i = 0; i < this.body.length; i++) {
         drawBlock(ctxt, this.body[i]);
       }
@@ -183,7 +202,7 @@ window.onload = function () {
     this.position = position;
     this.draw = function () {
       ctxt.save();
-      ctxt.fillStyle = "#33cc33";
+      ctxt.fillStyle = "#bf0000";
       ctxt.beginPath();
       var radius = blockSize / 2;
       var x = this.position[0] * blockSize + radius;
