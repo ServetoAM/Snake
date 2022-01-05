@@ -8,6 +8,7 @@ window.onload = function () {
   var appley;
   var widthInBlocks = canvasWidth / blockSize;
   var heightInBlocks = canvasHeight / blockSize;
+  var score;
 
   init();
 
@@ -29,6 +30,7 @@ window.onload = function () {
       "right"
     );
     appley = new Apple([10, 10]);
+    score = 0;
     refreshCanvas();
   }
 
@@ -38,6 +40,7 @@ window.onload = function () {
       gameOver();
     } else {
       if (snakey.isEatingApple(appley)) {
+        score++;
         snakey.ateApple = true;
         do {
           appley.setNewPosition();
@@ -48,6 +51,7 @@ window.onload = function () {
 
       snakey.draw();
       appley.draw();
+      drawScore();
       setTimeout(refreshCanvas, delay);
     }
   }
@@ -69,7 +73,15 @@ window.onload = function () {
       "right"
     );
     appley = new Apple([10, 10]);
+    score = 0;
     refreshCanvas();
+  }
+
+  function drawScore(){
+    ctxt.save();
+    ctxt.fillText("Score:", 0, 600);
+    ctxt.fillText(score.toString(), 30, 600)
+    ctxt.restore();
   }
 
   function drawBlock(ctxt, position) {
