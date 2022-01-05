@@ -38,6 +38,7 @@ window.onload = function () {
       // Game Over
     } else {
       if (snakey.isEatingApple(appley)) {
+        snakey.ateApple = true;
         do {
           appley.setNewPosition();
         } while (appley.isOnSnake(snakey));
@@ -60,6 +61,7 @@ window.onload = function () {
   function Snake(body, direction) {
     this.body = body;
     this.direction = direction;
+    this.ateApple = false;
     this.draw = function () {
       ctxt.save();
       // color of the snake
@@ -88,7 +90,8 @@ window.onload = function () {
           throw "Invalid Direction";
       }
       this.body.unshift(nextPosition);
-      this.body.pop();
+      if (!this.ateApple) this.body.pop();
+      else this.ateApple = false;
     };
     this.setDirection = function (newDirection) {
       var allowedDirections;
