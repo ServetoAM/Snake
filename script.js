@@ -70,10 +70,10 @@ window.onload = function () {
     var centreX = canvasWidth / 2;
     var centreY = canvasHeight / 2;
     ctxt.strokeText("Game Over", centreX, centreY - 180);
-    ctxt.fillText("Game Over",  centreX, centreY - 180);
+    ctxt.fillText("Game Over", centreX, centreY - 180);
     ctxt.font = "bold 40px sans-serif";
-    ctxt.strokeText("Press space to play again", centreX, centreY - 120);
-    ctxt.fillText("Press space to play again", centreX, centreY - 120);
+    ctxt.strokeText("Press enter to play again", centreX, centreY - 120);
+    ctxt.fillText("Press enter to play again", centreX, centreY - 120);
     ctxt.restore();
   }
 
@@ -92,7 +92,7 @@ window.onload = function () {
     refreshCanvas();
   }
 
-  function drawScore(){
+  function drawScore() {
     ctxt.save();
     ctxt.font = "bold 200px sans-serif";
     ctxt.fillStyle = "gray";
@@ -101,7 +101,7 @@ window.onload = function () {
     var centreX = canvasWidth / 2;
     var centreY = canvasHeight / 2;
     // ctxt.fillText("Score:", 0, 600);
-    ctxt.fillText(score.toString(), centreX, centreY)
+    ctxt.fillText(score.toString(), centreX, centreY);
     ctxt.restore();
   }
 
@@ -248,7 +248,7 @@ window.onload = function () {
       case 40:
         newDirection = "down";
         break;
-      case 32:
+      case 13:
         restart();
         return;
       default:
