@@ -11,6 +11,7 @@ window.onload = function () {
   var square_available = 597;
   var score;
   var timeout;
+  var confettiTimeOut;
 
   //Call the function to start everything
   init();
@@ -40,6 +41,7 @@ window.onload = function () {
     appley = new Apple([10, 10]);
     score = 596;
     refreshCanvas();
+
   }
 
   //function to restart the game properly
@@ -67,6 +69,7 @@ window.onload = function () {
       
       appley.draw();
       timeout = setTimeout(refreshCanvas, delay);
+      clearTimeout(confettiTimeOut);
     }
   }
 
@@ -103,9 +106,11 @@ window.onload = function () {
     appley = new Apple([10, 10]);
     score = 0;
     clearTimeout(timeout);
+    clearTimeout(confettiTimeOut);
     refreshCanvas();
   }
 
+  // Score on screen
   function drawScore() {
     console.log("drawScore");
     ctxt.save();
@@ -120,6 +125,7 @@ window.onload = function () {
     ctxt.restore();
   }
 
+  // Canvas' division into blocks
   function drawBlock(ctxt, position) {
     console.log("drawBlock");
     var x = position[0] * blockSize;
@@ -127,6 +133,7 @@ window.onload = function () {
     ctxt.fillRect(x, y, blockSize, blockSize);
   }
 
+  // Snake creation
   function Snake(body, direction) {
     console.log("Snake");
     this.body = body;
@@ -181,6 +188,7 @@ window.onload = function () {
         this.direction = newDirection;
       }
     };
+    //checking if Snake crash against something
     this.checkCollision = function () {
       var wallCollision = false;
       var snakeCollision = false;
@@ -236,6 +244,7 @@ window.onload = function () {
     ctxt.fillText("Press enter to play again", centreX, centreY - 120);
     ctxt.restore();
 
+    //Call of the confettis
     const DURATION = 8000,
       LENGTH = 120;
 
@@ -246,7 +255,7 @@ window.onload = function () {
       duration: DURATION,
     });
 
-    setTimeout(() => {
+    confettiTimeOut = setTimeout(() => {
       new Confetti({
         width: window.innerWidth,
         height: window.innerHeight,
@@ -256,6 +265,7 @@ window.onload = function () {
     }, DURATION / 2);
   }
 
+  //Random Apple 
   function Apple(position) {
     console.log("Apple");
     this.position = position;
@@ -289,6 +299,8 @@ window.onload = function () {
     };
   }
 
+
+  // Key code for directions and actions
   document.onkeydown = function handleKeyDown(e) {
     var key = e.keyCode;
     var newDirection;
