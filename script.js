@@ -39,14 +39,13 @@ window.onload = function () {
       "right"
     );
     appley = new Apple([10, 10]);
-    score = 596;
+    score = 0;
     refreshCanvas();
 
   }
 
   //function to restart the game properly
   function refreshCanvas() {
-    console.log("refreshCanvas");
     snakey.advance();
     if (snakey.checkCollision()) {
       gameOver();
@@ -75,7 +74,6 @@ window.onload = function () {
 
   //Text that says you lost
   function gameOver() {
-    console.log("gameOver");
     ctxt.save();
     ctxt.font = "bold 70px sans-serif";
     ctxt.fillStyle = "black";
@@ -94,7 +92,6 @@ window.onload = function () {
   }
 
   function restart() {
-    console.log("restart");
     snakey = new Snake(
       [
         [6, 4],
@@ -227,7 +224,6 @@ window.onload = function () {
 
   //When you finish the game
   function EndGame() {
-    console.log("EndGame");
     ctxt.save();
     ctxt.font = "bold 70px sans-serif";
     ctxt.fillStyle = "black";
@@ -245,7 +241,7 @@ window.onload = function () {
     ctxt.restore();
 
     //Call of the confettis
-    const DURATION = 8000,
+    const DURATION = 6000,
       LENGTH = 120;
 
     new Confetti({
@@ -254,20 +250,10 @@ window.onload = function () {
       length: LENGTH,
       duration: DURATION,
     });
-
-    confettiTimeOut = setTimeout(() => {
-      new Confetti({
-        width: window.innerWidth,
-        height: window.innerHeight,
-        length: LENGTH,
-        duration: DURATION,
-      });
-    }, DURATION / 2);
   }
 
   //Random Apple 
   function Apple(position) {
-    console.log("Apple");
     this.position = position;
     this.draw = function () {
       ctxt.save();
