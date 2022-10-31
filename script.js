@@ -20,13 +20,14 @@ window.onload = function () {
     console.log("init");
     // Creation of the canvas
     var canvas = document.createElement("canvas");
+    var container = document.getElementById("container")
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
     canvas.style.border = "15px solid #333333";
     canvas.style.margin = "20px auto";
     canvas.style.display = "block";
     canvas.style.backgroundColor = "#e5e5e5";
-    document.body.appendChild(canvas);
+    container.appendChild(canvas);
     //   How i want to draw on the html for the game
     ctxt = canvas.getContext("2d");
     // original position of the snake
